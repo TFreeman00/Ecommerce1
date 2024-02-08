@@ -19,23 +19,18 @@ model users {
   id       Int    @id @default(autoincrement())
   email    String @unique(map: "users_email_idx")
   password String
-}
-
-model admin {
-  id       Int    @id(map: "admin_pkey1") @default(autoincrement())
-  email    String @unique(map: "admin_email_idx")
-  password String
-}
-
-model cart {
-  id       Int     @id @default(autoincrement())
-  item     String
-  quantity Int
-  subtotal Decimal @db.Money
+  isAdmin Boolean
 }
 
 model orders {
   id    Int     @id @default(autoincrement())
   items String
   total Decimal @db.Money
+  isCart Boolean
 }
+
+// TODO
+// through table that is going to connect orders and products. 
+// "in this cart, there is this many of this product."
+
+// we need to link orders to users

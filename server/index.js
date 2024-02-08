@@ -20,3 +20,5 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
+// lookup vite express to be able to use vite on the front end in the same parent folder
