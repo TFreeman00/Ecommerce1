@@ -7,30 +7,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model products {
-  id          Int     @id(map: "admin_pkey") @default(autoincrement())
-  name        String
-  price       Decimal @db.Money
-  description String
-  inStock     Int
+model users {
+  id        Int      @id @default(autoincrement())
+  firstname String   @db.VarChar(255)
+  lastname  String   @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  isadmin   Boolean? @default(false)
+  orders    orders[]
 }
 
-model users {
-  id       Int    @id @default(autoincrement())
-  email    String @unique(map: "users_email_idx")
-  password String
-  isAdmin Boolean
+model products {
+  id          Int     @id(map: "admin_pkey") @default(autoincrement())
+  name        String @db.VarChar(255)
+  price       Decimal @db.Money
+  description String @db.VarChar(255)
+  imageurl String @db.VarChar(255)
+  inStock     Int
+  orderdetails orderdetails[]
 }
 
 model orders {
   id    Int     @id @default(autoincrement())
-  items String
+  items String @db.VarChar(255)
   total Decimal @db.Money
   isCart Boolean
+  userid Int
+  user users @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate:NoAction )
+  orderdetails orderdetails[]
+
 }
+
+model orderdetails {
+  id        Int       @id @default(autoincrement())
+  productid Int?
+  orderid   Int?
+  orders    orders?   @relation(fields: [orderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  products  products? @relation(fields: [productid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
 
 // TODO
 // through table that is going to connect orders and products. 
 // "in this cart, there is this many of this product."
 
-// we need to link orders to users
+// we need to link orders to users 
