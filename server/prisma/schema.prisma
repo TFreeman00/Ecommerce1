@@ -9,11 +9,11 @@ datasource db {
 
 model users {
   id        Int      @id @default(autoincrement())
-  firstname String   @db.VarChar(255)
-  lastname  String   @db.VarChar(255)
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
   email     String   @unique @db.VarChar(255)
   password  String   @db.VarChar(255)
-  isadmin   Boolean? @default(false)
+  isAdmin   Boolean? @default(false)
   orders    orders[]
 }
 
@@ -22,9 +22,9 @@ model products {
   name        String @db.VarChar(255)
   price       Decimal @db.Money
   description String @db.VarChar(255)
-  imageurl String @db.VarChar(255)
+  imageUrl String 
   inStock     Int
-  orderdetails orderdetails[]
+  orderDetails orderdetails[]
 }
 
 model orders {
@@ -32,23 +32,17 @@ model orders {
   items String @db.VarChar(255)
   total Decimal @db.Money
   isCart Boolean
-  userid Int
-  user users @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate:NoAction )
-  orderdetails orderdetails[]
+  userId Int
+  user users @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate:NoAction )
+  orderDetails orderdetails[]
 
 }
 
 model orderdetails {
   id        Int       @id @default(autoincrement())
-  productid Int?
-  orderid   Int?
-  orders    orders?   @relation(fields: [orderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  products  products? @relation(fields: [productid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productId Int?
+  orderId   Int?
+  orders    orders?   @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  products  products? @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-
-// TODO
-// through table that is going to connect orders and products. 
-// "in this cart, there is this many of this product."
-
-// we need to link orders to users 
