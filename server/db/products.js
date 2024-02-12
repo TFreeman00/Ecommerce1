@@ -21,7 +21,10 @@ async function getProductById(id) {
   }
 }
 
+
+
 module.exports = {
   getAllProducts,
   getProductById,
 };
+
