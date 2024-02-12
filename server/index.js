@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/api", require("./api"));
+app.use("/products", require("./api/products.js"));
 app.use("/auth", require("./auth/auth.js"));
 
 app.listen(PORT, () => {

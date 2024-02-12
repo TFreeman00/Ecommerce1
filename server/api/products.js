@@ -1,28 +1,36 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { getAllProducts, getProductById } = require("../db/products");
 
+/* GET /products - get all products */
 router.get("/", async (req, res, next) => {
   try {
-    const products = await getAllProducts();
+    const products = await prisma.products.findMany();
     res.send(products);
   } catch (error) {
     next(error);
   }
 });
 
+/* GET /products/:id - get the product specified by id */
 router.get("/:id", async (req, res, next) => {
   try {
-    const product = await getProductById(req.params.id);
-    if (!product) {
+      
+    const products = await prisma.products.findFirst({
+      where: {
+        id: Number(req.params.id),
+      },
+    }); if (!products) {
       return res.status(404).send("Product was not found");
     }
+    res.send(products); 
+   
   } catch (error) {
     next(error);
   }
 });
 
+/* POST /products - create a new post as the currently logged in user */
 router.post("/", async (req, res, next) => {
   try {
     if (req.user.isAdmin === false) {
