@@ -15,22 +15,21 @@ router.get("/", async (req, res, next) => {
 /* GET /products/:id - get the product specified by id */
 router.get("/:id", async (req, res, next) => {
   try {
-      
     const products = await prisma.products.findFirst({
       where: {
         id: Number(req.params.id),
       },
-    }); if (!products) {
+    });
+    if (!products) {
       return res.status(404).send("Product was not found");
     }
-    res.send(products); 
-   
+    res.send(products);
   } catch (error) {
     next(error);
   }
 });
 
-/* POST /products - create a new post as the currently logged in user */
+/* POST /products - create a new product if currently logged in as admin */
 router.post("/", async (req, res, next) => {
   try {
     if (req.user.isAdmin === false) {
@@ -51,6 +50,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+/* PUT /products/:id - update a product if currently logged in as admin */
 router.put("/:id", async (req, res, next) => {
   try {
     if (req.user.isAdmin === false) {
@@ -76,6 +76,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
+/* DELETE /products/:id - delete a product if currently logged in as admin */
 router.delete("/:id", async (req, res, next) => {
   try {
     if (req.user.isAdmin === false) {
